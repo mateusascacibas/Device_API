@@ -13,9 +13,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "devices")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Device {
 	
 	@Id
@@ -38,37 +47,5 @@ public class Device {
 	@PrePersist
     public void prePersist() {
         this.creationTime = LocalDateTime.now();
-    }
-	
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getBrand() {
-		return brand;
-	}
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
-	public StateEnum getState() {
-		return state;
-	}
-	public void setState(StateEnum state) {
-		this.state = state;
-	}
-	public LocalDateTime getCreationTime() {
-		return creationTime;
-	}
-	public void setCreationTime(LocalDateTime creationTime) {
-		this.creationTime = creationTime;
-	}
-		
+    }	
 }
