@@ -96,10 +96,29 @@ You will be able to see coverage for classes, methods, lines, and branches.
 
 ---
 
-## 💡 Future Improvements
+## CI/CD with GitHub Actions + Deploy via Render
+This project uses an automated pipeline configured with GitHub Actions on the main branch. Every time a new push is made, the application is:
 
-- Add pagination and filtering on device listing
-- Add user authentication and authorization
-- Improve error handling and exception messages
-- Add test coverage for edge cases and exceptions
-- CI/CD pipeline for automated builds
+```bash
+ Built with Maven
+
+ Packaged into a Docker image
+
+ Published to Docker Hub: docker.io/mateusascacibas/device-api:latest
+
+ Automatically deployed to Render via a deploy webhook
+
+ Published to Docker Hub: docker.io/mateusascacibas/device-api:latest
+```
+
+Automatically deployed to Render via a deploy webhook
+
+## Live Application
+The API is publicly available at:
+
+```bash
+📎 Base URL: https://device-api-latest.onrender.com
+📘 Swagger UI: https://device-api-latest.onrender.com/swagger-ui/index.html
+```
+
+
