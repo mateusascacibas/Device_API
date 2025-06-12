@@ -83,7 +83,7 @@ You can run tests using:
 To generate a coverage report using JaCoCo, run:
 
 ```bash
-./mvnw test
+./mvnw test verify
 ```
 
 After running the tests, open the following file in your browser to view the coverage report:
