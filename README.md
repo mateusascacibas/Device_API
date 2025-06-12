@@ -32,8 +32,8 @@ Includes Swagger documentation, Docker support, and basic test coverage.
 ### 1. Clone the project
 
 ```bash
-git clone https://github.com/your-username/device-api.git
-cd device-api
+git clone https://github.com/mateusascacibas/Device_API.git
+cd Device_API/
 ```
 
 ### 2. Build the project (generate the `.jar` file)
