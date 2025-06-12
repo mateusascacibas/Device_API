@@ -14,6 +14,8 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.mateusascacibas.device_api.application.exception.DeviceNotFoundException;
 
 public class GlobalExceptionHandlerTest {
@@ -83,5 +85,20 @@ public class GlobalExceptionHandlerTest {
         assertEquals("Malformed JSON", response.getBody().get("message"));
         assertEquals("Invalid request body", response.getBody().get("error"));
     }
+    
+    @Test
+    void shouldHandleInvalidFormatException() {
+        InvalidFormatException formatException = new InvalidFormatException(
+            null, "Invalid", Integer.class);
+        formatException.prependPath(new JsonMappingException.Reference("state"));
+
+        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("Invalid JSON", formatException);
+
+        ResponseEntity<Map<String, Object>> response = handler.handleInvalidJson(ex);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertTrue(response.getBody().get("message").toString().contains("Invalid value for field"));
+    }
+
 
 }
