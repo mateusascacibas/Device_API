@@ -18,6 +18,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "devices")
@@ -31,12 +32,15 @@ public class Device {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Setter
 	@Column(nullable = false)
 	private String name;
 	
+	@Setter
 	@Column(nullable = false)
 	private String brand;
 	
+	@Setter
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private StateEnum state;
