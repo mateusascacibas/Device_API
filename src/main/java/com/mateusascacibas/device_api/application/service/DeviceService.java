@@ -77,15 +77,28 @@ public class DeviceService {
 	}
 
 	private void validateUpdate(DeviceRequestDTO requestDTO, Device device) {
-		if (StateEnum.IN_USE.equals(device.getState())) {
-			boolean nameChanged = isNotBlank(requestDTO.name()) && !device.getName().equals(requestDTO.name());
-			boolean brandChanged = isNotBlank(requestDTO.brand()) && !device.getBrand().equals(requestDTO.brand());
+	    String newName = requestDTO.name() != null ? requestDTO.name() : device.getName();
+	    String newBrand = requestDTO.brand() != null ? requestDTO.brand() : device.getBrand();
 
-			if (nameChanged || brandChanged) {
-				throw new IllegalStateException("Cannot update name or brand when device is IN_USE");
-			}
-		}
+	    if (StateEnum.IN_USE.equals(device.getState())) {
+	        boolean nameChanged = !newName.equals(device.getName());
+	        boolean brandChanged = !newBrand.equals(device.getBrand());
+
+	        if (nameChanged || brandChanged) {
+	            throw new IllegalStateException("Cannot update name or brand when device is IN_USE");
+	        }
+	    }
+
+	    if (requestDTO.name() != null && requestDTO.name().isBlank()) {
+	        throw new IllegalArgumentException("Device name cannot be blank");
+	    }
+
+	    if (requestDTO.brand() != null && requestDTO.brand().isBlank()) {
+	        throw new IllegalArgumentException("Device brand cannot be blank");
+	    }
 	}
+
+
 
 	private boolean isNotBlank(String value) {
 		return value != null && !value.trim().isEmpty();

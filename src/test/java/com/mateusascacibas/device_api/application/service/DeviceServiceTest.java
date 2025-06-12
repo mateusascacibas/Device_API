@@ -1,12 +1,8 @@
 package com.mateusascacibas.device_api.application.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,15 +33,18 @@ class DeviceServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
+    private Device createDevice(String name, String brand, StateEnum state) {
+        Device device = new Device();
+        device.setName(name);
+        device.setBrand(brand);
+        device.setState(state);
+        return device;
+    }
+
     @Test
     void shouldCreateDeviceSuccessfully() {
         DeviceRequestDTO request = new DeviceRequestDTO("Phone", "Samsung", StateEnum.IN_USE);
-        Device saved = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.IN_USE)
-                .build();
+        Device saved = createDevice("Phone", "Samsung", StateEnum.IN_USE);
 
         when(deviceRepository.save(any(Device.class))).thenReturn(saved);
 
@@ -58,38 +57,22 @@ class DeviceServiceTest {
 
     @Test
     void shouldUpdateDeviceSuccessfully() {
-        Device existing = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.AVAILABLE)
-                .build();
+        Device existing = createDevice("Phone", "Samsung", StateEnum.AVAILABLE);
+        Device updated = createDevice("Tablet", "Samsung", StateEnum.AVAILABLE);
 
-        Device updated = Device.builder()
-                .id(1L)
-                .name("Tablet")
-                .brand("Samsung")
-                .state(StateEnum.AVAILABLE)
-                .build();
-        
         when(deviceRepository.findById(1L)).thenReturn(Optional.of(existing));
         when(deviceRepository.save(any(Device.class))).thenReturn(updated);
 
         DeviceRequestDTO update = new DeviceRequestDTO("Tablet", "Samsung", StateEnum.AVAILABLE);
         DeviceResponseDTO response = deviceService.updateDevice(1L, update);
-        
+
         assertNotNull(response);
         assertEquals("Tablet", response.name());
     }
-    
+
     @Test
     void shouldThrowWhenUpdatingNameOfInUseDevice() {
-        Device existing = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.IN_USE)
-                .build();
+        Device existing = createDevice("Phone", "Samsung", StateEnum.IN_USE);
 
         when(deviceRepository.findById(1L)).thenReturn(Optional.of(existing));
 
@@ -100,12 +83,7 @@ class DeviceServiceTest {
 
     @Test
     void shouldDeleteDeviceSuccessfully() {
-        Device device = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.INACTIVE)
-                .build();
+        Device device = createDevice("Phone", "Samsung", StateEnum.INACTIVE);
 
         when(deviceRepository.findById(1L)).thenReturn(Optional.of(device));
 
@@ -116,12 +94,7 @@ class DeviceServiceTest {
 
     @Test
     void shouldThrowWhenDeletingInUseDevice() {
-        Device device = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.IN_USE)
-                .build();
+        Device device = createDevice("Phone", "Samsung", StateEnum.IN_USE);
 
         when(deviceRepository.findById(1L)).thenReturn(Optional.of(device));
 
@@ -130,12 +103,7 @@ class DeviceServiceTest {
 
     @Test
     void shouldReturnAllDevices() {
-        Device device = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.IN_USE)
-                .build();
+        Device device = createDevice("Phone", "Samsung", StateEnum.IN_USE);
 
         when(deviceRepository.findAll()).thenReturn(List.of(device));
 
@@ -147,12 +115,7 @@ class DeviceServiceTest {
 
     @Test
     void shouldReturnDeviceById() {
-        Device device = Device.builder()
-                .id(1L)
-                .name("Phone")
-                .brand("Samsung")
-                .state(StateEnum.IN_USE)
-                .build();
+        Device device = createDevice("Phone", "Samsung", StateEnum.IN_USE);
 
         when(deviceRepository.findById(1L)).thenReturn(Optional.of(device));
 
@@ -160,23 +123,12 @@ class DeviceServiceTest {
 
         assertEquals("Phone", result.name());
     }
-    
+
     @Test
     void shouldReturnDevicesByState() {
         StateEnum state = StateEnum.IN_USE;
-        Device device1 = Device.builder()
-                .id(1L)
-                .name("Device A")
-                .brand("Brand X")
-                .state(state)
-                .build();
-
-        Device device2 = Device.builder()
-                .id(2L)
-                .name("Device B")
-                .brand("Brand Y")
-                .state(state)
-                .build();
+        Device device1 = createDevice("Device A", "Brand X", state);
+        Device device2 = createDevice("Device B", "Brand Y", state);
 
         when(deviceRepository.findByState(state)).thenReturn(List.of(device1, device2));
 
@@ -186,24 +138,12 @@ class DeviceServiceTest {
         assertEquals("Device A", result.get(0).name());
         assertEquals("Device B", result.get(1).name());
     }
-    
+
     @Test
     void shouldReturnDevicesByBrand() {
-    	StateEnum state = StateEnum.IN_USE;
-    	String brand = "Test";
-        Device device1 = Device.builder()
-                .id(1L)
-                .name("Device A")
-                .brand(brand)
-                .state(state)
-                .build();
-
-        Device device2 = Device.builder()
-                .id(2L)
-                .name("Device B")
-                .brand(brand)
-                .state(state)
-                .build();
+        String brand = "Test";
+        Device device1 = createDevice("Device A", brand, StateEnum.IN_USE);
+        Device device2 = createDevice("Device B", brand, StateEnum.IN_USE);
 
         when(deviceRepository.findByBrand(brand)).thenReturn(List.of(device1, device2));
 
@@ -214,11 +154,10 @@ class DeviceServiceTest {
         assertEquals("Device B", result.get(1).name());
     }
 
-
     @Test
     void shouldThrowWhenDeviceNotFound() {
         when(deviceRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(DeviceNotFoundException.class, () -> deviceService.findDeviceByID(1L));
     }
-}
+} 
