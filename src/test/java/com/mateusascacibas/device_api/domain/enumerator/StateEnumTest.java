@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.mateusascacibas.device_api.domain.enumerator.StateEnum;
 
-public class StateEnumTest {
+class StateEnumTest {
 
 	@Test
 	void shouldReturnEnumByName() {

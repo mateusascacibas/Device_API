@@ -40,14 +40,6 @@ public class DeviceService {
 		Device updated = deviceRepository.save(device);
 		return DeviceMapper.toDTO(updated);
 	}
-
-	private void validateUpdate(DeviceRequestDTO requestDTO, Device device) {
-		if(StateEnum.IN_USE.equals(device.getState())) {
-			if(!device.getName().equals(requestDTO.name()) || !device.getBrand().equals(requestDTO.brand())) {
-				throw new IllegalStateException("Cannot update name or brand when device is IN_USE");
-			}
-		}
-	}
 	
 	public DeviceResponseDTO findDeviceByID(Long id) {
 		Device device = deviceRepository.findById(id).orElseThrow(() -> new DeviceNotFoundException(id));
@@ -76,5 +68,13 @@ public class DeviceService {
 			throw new IllegalArgumentException("Cannot delete device when state is IN_USE");
 		}
 		deviceRepository.delete(device);
+	}
+	
+	private void validateUpdate(DeviceRequestDTO requestDTO, Device device) {
+		if(StateEnum.IN_USE.equals(device.getState())) {
+			if(!device.getName().equals(requestDTO.name()) || !device.getBrand().equals(requestDTO.brand())) {
+				throw new IllegalStateException("Cannot update name or brand when device is IN_USE");
+			}
+		}
 	}
 }

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.mateusascacibas.device_api.domain.enumerator.StateEnum;
 import com.mateusascacibas.device_api.domain.model.Device;
 
-public class DeviceTest {
+class DeviceTest {
 
 	@Test
 	void shouldCreateDevice() {
