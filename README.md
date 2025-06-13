@@ -68,6 +68,18 @@ Once the app is running, access the documentation at:
 http://localhost:8080/swagger-ui/index.html
 ```
 
+## Postman Collection
+This project includes a Device API.postman_collection file, which contains all the available API requests.
+You can import this file into Postman to easily explore and test the available endpoints.
+
+📥 To use it:
+
+Download the file Device API.postman_collection.json from the repository.
+
+Open Postman, click Import, and select the downloaded file.
+
+You'll have access to all pre-configured requests for easy testing.
+
 ---
 
 ## Running Tests
